@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "CommonJS",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "strict": true,
+    "skipLibCheck": true,
+    "outDir": "dist",
+    "typeRoots": ["./node_modules/@types", "./@types"],
+    "baseUrl": ".",
+    "paths": {
+      "@api/*": ["src/api/*"],
+      "@config/*": ["src/config/*"],
+      "@middlewares/*": ["src/middlewares/*"],
+      "@services/*": ["src/services/*"],
+      "@types/*": ["src/types/*"]
+    }
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules"]
+}
