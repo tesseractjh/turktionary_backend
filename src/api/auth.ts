@@ -41,6 +41,7 @@ router.get(
       } else {
         // Oauth로 가입을 시도한 적이 있으나, 닉네임과 이메일 입력 등 가입 절차를 완료하지 않은 경우 -> 임시 닉네임을 쿠키로 전달
         const token = createUserInfoForJoinToken(user.user_name);
+        res.clearCookie('auth');
         res.cookie('user_info_for_join', token, {
           httpOnly: true,
           signed: true
@@ -51,6 +52,7 @@ router.get(
       // 최초 Oauth 로그인 -> DB에 임시 닉네임으로 유저 정보 생성 -> 임시 닉네임을 쿠키로 전달
       const tempUserName = await createUser(id, provider, emails?.[0]?.value);
       const token = createUserInfoForJoinToken(tempUserName);
+      res.clearCookie('auth');
       res.cookie('user_info_for_join', token, { httpOnly: true, signed: true });
       res.redirect(`${DOMAIN}/join/form`);
     }
