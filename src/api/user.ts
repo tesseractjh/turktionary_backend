@@ -7,7 +7,6 @@ import {
   updateUserByTempUserName
 } from '@services/user';
 import { CustomError } from '@middlewares/handleError';
-import tokenHandlers from '@middlewares/verifyToken';
 import verifyRefreshToken from '@middlewares/verifyRefreshToken';
 import verifyJoinToken from '@middlewares/verifyJoinToken';
 
@@ -77,12 +76,16 @@ router.patch('/refresh', verifyRefreshToken, async (req, res) => {
   }
 });
 
-router.get('/info/header', ...tokenHandlers, async (req, res) => {
-  const {
-    accessToken: { userId }
-  } = req;
-  const user = await findUserHeaderInfo(userId as number);
-  res.json(user);
+router.get('/info/header', verifyRefreshToken, async (req, res) => {
+  const { refreshToken } = req;
+  const { userId } = refreshToken;
+  if (refreshToken.status === 'VALID') {
+    const accessToken = createAccessToken(userId as number);
+    const user = await findUserHeaderInfo(userId as number);
+    res.json({ accessToken, user });
+  } else {
+    res.end();
+  }
 });
 
 export default router;
