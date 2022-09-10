@@ -76,6 +76,11 @@ router.patch('/refresh', verifyRefreshToken, async (req, res) => {
   }
 });
 
+router.get('/is-logged-in', verifyRefreshToken, async (req, res) => {
+  const { refreshToken } = req;
+  res.json({ isLoggedIn: refreshToken.status === 'VALID' });
+});
+
 router.get('/info/header', verifyRefreshToken, async (req, res) => {
   const { refreshToken } = req;
   const { userId } = refreshToken;
