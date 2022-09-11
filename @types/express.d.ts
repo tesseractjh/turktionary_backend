@@ -10,5 +10,12 @@ declare module Express {
     tempUserName: string;
     accessToken: RequestToken;
     refreshToken: RequestToken;
+    user: User;
+  }
+
+  interface User {
+    id: string;
+    provider: string;
+    email: string;
   }
 }

@@ -45,7 +45,7 @@ export const findUserHeaderInfo = async (userId: number) => {
 export const createUser = async (
   id: string,
   provider: string,
-  email: string
+  email?: string
 ) => {
   let tempUserName;
   for (let i = 0; i < 10; i++) {

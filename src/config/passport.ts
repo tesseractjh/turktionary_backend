@@ -14,7 +14,9 @@ passport.use(
       callbackURL: GOOGLE_AUTH_CALLBACK
     },
     (accessToken, refreshToken, profile, done) => {
-      return done(null, profile);
+      const { id, provider, emails } = profile as unknown as GoogleUser;
+      const user = { id, provider, email: emails?.[0]?.value };
+      return done(null, user);
     }
   )
 );
