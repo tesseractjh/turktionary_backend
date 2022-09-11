@@ -5,11 +5,22 @@ declare global {
     value: string;
     verified: boolean;
   };
+  type KakaoJSON = {
+    kakao_account: {
+      email: string;
+    };
+  };
 
   interface GoogleUser {
     id: string;
     provider: string;
     emails: GoogleUserEmail[];
+  }
+
+  interface KakaoUser {
+    id: number;
+    provider: string;
+    _json: KakaoJSON;
   }
 
   interface Token {

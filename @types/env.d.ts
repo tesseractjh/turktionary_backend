@@ -8,6 +8,9 @@ declare namespace NodeJS {
     GOOGLE_AUTH_ID: string;
     GOOGLE_AUTH_SECRET: string;
     GOOGLE_AUTH_CALLBACK: string;
+    KAKAO_AUTH_ID: string;
+    KAKAO_AUTH_SECRET: string;
+    KAKAO_AUTH_CALLBACK: string;
     JWT_SECRET: string;
     DOMAIN: string;
   }

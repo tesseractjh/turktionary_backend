@@ -15,4 +15,12 @@ router.get(
   handleAuth
 );
 
+router.get('/kakao', passport.authenticate('kakao'));
+
+router.get(
+  '/kakao/callback',
+  passport.authenticate('kakao', { session: false }),
+  handleAuth
+);
+
 export default router;
