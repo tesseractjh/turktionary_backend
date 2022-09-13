@@ -11,6 +11,7 @@ declare module Express {
     accessToken: RequestToken;
     refreshToken: RequestToken;
     user: User;
+    addon: Record<string, any>;
   }
 
   interface User {
