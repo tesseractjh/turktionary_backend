@@ -93,20 +93,6 @@ export const updateUserByUserId = async (
   `);
 };
 
-export const createAccessToken = (userId: number) =>
-  jwt.sign({ userId }, JWT_SECRET, {
-    expiresIn: '1h',
-    issuer: 'turktionary',
-    algorithm: 'HS256'
-  });
-
-export const createRefreshToken = (userId: number) =>
-  jwt.sign({ userId }, JWT_SECRET, {
-    expiresIn: '7d',
-    issuer: 'turktionary',
-    algorithm: 'HS256'
-  });
-
 export const createUserInfoForJoinToken = (tempUserName: string) =>
   jwt.sign({ tempUserName }, JWT_SECRET, {
     expiresIn: '30m',

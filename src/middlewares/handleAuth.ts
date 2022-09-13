@@ -1,12 +1,12 @@
 import dotenv from 'dotenv';
 import { RequestHandler } from 'express';
 import {
-  createRefreshToken,
   createUser,
   createUserInfoForJoinToken,
   findUserByOauth,
   updateUserByUserId
 } from '@services/user';
+import { createRefreshToken } from '@services/auth';
 import { CustomError } from './handleError';
 
 dotenv.config();
