@@ -1,14 +1,14 @@
 import { Router } from 'express';
 import {
-  createAccessToken,
-  createRefreshToken,
   findUserByUserName,
   findUserHeaderInfo,
   updateUserByTempUserName
 } from '@services/user';
+import { createAccessToken, createRefreshToken } from '@services/auth';
 import { CustomError } from '@middlewares/handleError';
 import verifyRefreshToken from '@middlewares/verifyRefreshToken';
 import verifyJoinToken from '@middlewares/verifyJoinToken';
+import refreshTokens from '@middlewares/refreshTokens';
 
 const router = Router();
 
@@ -66,19 +66,32 @@ router.get('/email', verifyJoinToken, async (req, res) => {
   res.json({ email });
 });
 
-router.patch('/refresh', verifyRefreshToken, async (req, res) => {
+router.patch('/refresh', verifyRefreshToken, async (req, res, next) => {
   const { refreshToken } = req;
   if (refreshToken.status === 'VALID') {
-    const accessToken = createAccessToken(refreshToken.userId as number);
-    res.json({ accessToken });
+    refreshTokens((req, res) => {
+      const { addon } = req;
+      res.json({ ...addon });
+    })(req, res, next);
+  } else if (refreshToken.status === 'INVALID') {
+    throw new CustomError('002', 'refresh token이 유효하지 않음', {
+      clearAccessToken: true,
+      clearRefreshToken: true
+    });
   } else {
     res.end();
   }
 });
 
-router.get('/is-logged-in', verifyRefreshToken, async (req, res) => {
+router.get('/is-logged-in', verifyRefreshToken, async (req, res, next) => {
   const { refreshToken } = req;
-  res.json({ isLoggedIn: refreshToken.status === 'VALID' });
+  if (refreshToken.status === 'VALID') {
+    refreshTokens((req, res) => {
+      res.json({ isLoggedIn: true });
+    })(req, res, next);
+  } else {
+    res.json({ isLoggedIn: false });
+  }
 });
 
 router.get('/info/header', verifyRefreshToken, async (req, res) => {
