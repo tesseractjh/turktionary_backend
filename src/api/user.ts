@@ -9,6 +9,7 @@ import { CustomError } from '@middlewares/handleError';
 import verifyRefreshToken from '@middlewares/verifyRefreshToken';
 import verifyJoinToken from '@middlewares/verifyJoinToken';
 import refreshTokens from '@middlewares/refreshTokens';
+import tokenHandlers from '@middlewares/tokenHandlers';
 
 const router = Router();
 
@@ -94,16 +95,11 @@ router.get('/is-logged-in', verifyRefreshToken, async (req, res, next) => {
   }
 });
 
-router.get('/info/header', verifyRefreshToken, async (req, res) => {
-  const { refreshToken } = req;
-  const { userId } = refreshToken;
-  if (refreshToken.status === 'VALID') {
-    const accessToken = createAccessToken(userId as number);
-    const user = await findUserHeaderInfo(userId as number);
-    res.json({ accessToken, user });
-  } else {
-    res.end();
-  }
+router.get('/info/header', ...tokenHandlers, async (req, res) => {
+  const { accessToken, refreshToken, addon } = req;
+  const { userId } = accessToken.userId ? accessToken : refreshToken;
+  const user = await findUserHeaderInfo(userId as number);
+  res.json({ ...addon, user });
 });
 
 export default router;
