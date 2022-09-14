@@ -15,6 +15,7 @@ const verifyAccessToken: RequestHandler = async (req, res, next) => {
       }) as Token;
       if (token) {
         req.accessToken = { status: 'VALID', userId: token.userId };
+        req.disableVerifyRefreshToken = true;
       } else {
         req.accessToken = { status: 'INVALID' };
       }

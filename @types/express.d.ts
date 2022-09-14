@@ -11,6 +11,7 @@ declare module Express {
     accessToken: RequestToken;
     refreshToken: RequestToken;
     user: User;
+    disableVerifyRefreshToken: boolean;
     addon: Record<string, any>;
   }
 
