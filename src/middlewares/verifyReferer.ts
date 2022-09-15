@@ -1,5 +1,6 @@
 import { RequestHandler } from 'express';
 import dotenv from 'dotenv';
+import { CustomError } from './handleError';
 
 dotenv.config();
 
@@ -7,10 +8,10 @@ const { DOMAIN } = process.env;
 
 const verifyReferer: RequestHandler = async (req, res, next) => {
   const { referer } = req.headers;
-  if (typeof referer !== 'string' || `${DOMAIN}/`) {
-    next();
+  if (typeof referer !== 'string' || !referer.startsWith(DOMAIN)) {
+    throw new CustomError('010', '잘못된 Referer');
   } else {
-    throw Error;
+    next();
   }
 };
 
