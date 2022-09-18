@@ -102,4 +102,9 @@ router.get('/info/header', ...tokenHandlers, async (req, res) => {
   res.json({ ...addon, user });
 });
 
+router.post('/logout', async (req, res) => {
+  res.clearCookie('auth');
+  res.json({ accessToken: '' });
+});
+
 export default router;
