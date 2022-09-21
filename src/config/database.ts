@@ -1,3 +1,4 @@
+import { CustomError } from '@middlewares/handleError';
 import dotenv from 'dotenv';
 import mysql from 'mysql2/promise';
 
@@ -24,9 +25,18 @@ const DB = {
       } catch (queryError) {
         console.log('QUERY_ERROR:', queryError);
         connection.release();
-        return null;
+        const { code } = queryError as { code: string };
+        switch (code) {
+          case 'ER_DUP_ENTRY':
+            throw new CustomError('013', '중복된 데이터');
+          default:
+            throw new CustomError('012', '쿼리 에러');
+        }
       }
     } catch (databaseError) {
+      if (databaseError instanceof CustomError) {
+        throw databaseError;
+      }
       console.log('DB_ERROR:', databaseError);
       return null;
     }

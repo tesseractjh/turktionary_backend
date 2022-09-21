@@ -34,7 +34,10 @@ const statusMap: Partial<Record<ErrorCode, number>> = {
   '007': 403,
   '008': 400, // OAuth 리디렉션 후 전달받은 user 정보가 유효하지 않음,
   '009': 500, // 토큰 발급 과정에서 에러 발생
-  '010': 401 // Referer가 올바르지 않음
+  '010': 401, // Referer가 올바르지 않음,
+  '011': 500, // 데이터베이스 오류
+  '012': 500, // 모든 쿼리 오류
+  '013': 500 // 쿼리 오류(중복)
 };
 
 const handleError: ErrorRequestHandler = (error, req, res, next) => {
