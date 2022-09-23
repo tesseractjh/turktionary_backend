@@ -20,4 +20,14 @@ declare namespace Model {
     notification_link: string;
     created_time: Date;
   }
+
+  interface POS {
+    pos_id: number;
+    user_id: number;
+    lang_name: string;
+    pos_name: string;
+    pos_text: string;
+    pos_order: number;
+    created_time: Date;
+  }
 }
