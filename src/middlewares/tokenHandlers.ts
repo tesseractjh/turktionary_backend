@@ -18,7 +18,7 @@ const handleRefreshToken: RequestHandler = async (req, res, next) => {
         clearRefreshToken: true
       });
     } else {
-      refreshTokens()(req, res, next);
+      res.json({ refreshAccessToken: true });
     }
   } catch (error) {
     handleError(error, req, res, next);

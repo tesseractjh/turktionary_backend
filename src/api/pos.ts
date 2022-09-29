@@ -14,23 +14,21 @@ const router = Router();
 
 router.get('/', ...tokenHandlers, async (req, res) => {
   const {
-    query: { id, lang, order },
-    addon
+    query: { id, lang, order }
   } = req;
   const pos = id
     ? await findPOSById(id as string)
     : await findPOSByLangAndName(lang as string, order as string);
-  res.json({ ...addon, pos: pos?.[0] || null });
+  res.json({ pos: pos?.[0] || null });
 });
 
 router.post('/', ...tokenHandlers, async (req, res) => {
   const {
     body: { langId: langName, posName, posText, posOrder },
-    accessToken: { userId },
-    addon
+    accessToken: { userId }
   } = req;
   await createPOS(userId as number, langName, posName, posText, posOrder);
-  res.json({ ...addon });
+  res.json({ success: true });
 });
 
 router.get('/list/:lang_name', async (req, res) => {
@@ -43,31 +41,28 @@ router.get('/list/:lang_name', async (req, res) => {
 
 router.get('/history', ...tokenHandlers, async (req, res) => {
   const {
-    query: { lang, order },
-    addon
+    query: { lang, order }
   } = req;
   const pos = await findPOSHistorySummary(lang as string, order as string);
-  res.json({ ...addon, pos });
+  res.json({ pos });
 });
 
 router.get('/history/diff', ...tokenHandlers, async (req, res) => {
   const {
-    query: { lang, order, id },
-    addon
+    query: { lang, order, id }
   } = req;
   const pos = await findPOSHistoryDiff(
     lang as string,
     order as string,
     id as string
   );
-  res.json({ ...addon, pos });
+  res.json({ pos });
 });
 
 router.post('/report', ...tokenHandlers, async (req, res) => {
   const {
     body: { vocaPropertyName, reportTargetId, reportText },
-    accessToken: { userId },
-    addon
+    accessToken: { userId }
   } = req;
   await createPOSReport(
     userId as number,
@@ -75,7 +70,7 @@ router.post('/report', ...tokenHandlers, async (req, res) => {
     reportTargetId,
     reportText
   );
-  res.json({ ...addon });
+  res.json({ success: true });
 });
 
 export default router;
