@@ -126,7 +126,7 @@ export const createPOS = async (
             '${langName}',
             '${posName}',
             '${posText}',
-            (MAX(pos_order) + 1)
+            IFNULL(MAX(pos_order) + 1, 1)
           FROM pos
           WHERE lang_name = '${langName}'
         `
