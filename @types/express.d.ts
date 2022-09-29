@@ -3,6 +3,7 @@ declare module Express {
 
   interface RequestToken {
     status: TokenStatus;
+    token?: string;
     userId?: number;
   }
 
@@ -12,7 +13,6 @@ declare module Express {
     refreshToken: RequestToken;
     user: User;
     disableVerifyRefreshToken: boolean;
-    addon: Record<string, any>;
   }
 
   interface User {

@@ -19,7 +19,7 @@ const refreshTokens: HandlerWithCallback =
         httpOnly: true,
         signed: true
       });
-      req.addon = { ...(req.addon ?? {}), accessToken: newAccessToken };
+      req.accessToken = { status: 'VALID', token: newAccessToken, userId };
       if (callback) {
         callback(req, res);
       } else {

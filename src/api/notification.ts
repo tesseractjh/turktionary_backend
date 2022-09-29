@@ -10,33 +10,30 @@ const router = Router();
 
 router.get('/', ...tokenHandlers, async (req, res) => {
   const {
-    accessToken: { userId },
-    addon
+    accessToken: { userId }
   } = req;
   const notification = await findUserNotification(userId as number);
-  res.json({ ...addon, notification });
+  res.json({ notification });
 });
 
 router.delete('/', ...tokenHandlers, async (req, res) => {
   const {
     accessToken: { userId },
-    query: { notification_id },
-    addon
+    query: { notification_id }
   } = req;
   await deleteUserNotification(
     notification_id as unknown as number,
     userId as number
   );
-  res.json({ ...addon });
+  res.json({ success: true });
 });
 
 router.delete('/all', ...tokenHandlers, async (req, res) => {
   const {
-    accessToken: { userId },
-    addon
+    accessToken: { userId }
   } = req;
   await deleteAllUserNotification(userId as number);
-  res.json({ ...addon });
+  res.json({ success: true });
 });
 
 export default router;

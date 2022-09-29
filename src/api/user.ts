@@ -71,8 +71,10 @@ router.patch('/refresh', verifyRefreshToken, async (req, res, next) => {
   const { refreshToken } = req;
   if (refreshToken.status === 'VALID') {
     refreshTokens((req, res) => {
-      const { addon } = req;
-      res.json({ ...addon });
+      const {
+        accessToken: { token }
+      } = req;
+      res.json({ accessToken: token });
     })(req, res, next);
   } else if (refreshToken.status === 'INVALID') {
     throw new CustomError('002', 'refresh token이 유효하지 않음', {
@@ -96,10 +98,10 @@ router.get('/is-logged-in', verifyRefreshToken, async (req, res, next) => {
 });
 
 router.get('/info/header', ...tokenHandlers, async (req, res) => {
-  const { accessToken, refreshToken, addon } = req;
+  const { accessToken, refreshToken } = req;
   const { userId } = accessToken.userId ? accessToken : refreshToken;
   const user = await findUserHeaderInfo(userId as number);
-  res.json({ ...addon, user });
+  res.json({ user });
 });
 
 router.post('/logout', async (req, res) => {
