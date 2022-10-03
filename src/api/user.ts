@@ -101,7 +101,7 @@ router.get('/info/header', ...tokenHandlers, async (req, res) => {
   const { accessToken, refreshToken } = req;
   const { userId } = accessToken.userId ? accessToken : refreshToken;
   const user = await findUserHeaderInfo(userId as number);
-  res.json({ user });
+  res.json(user);
 });
 
 router.post('/logout', async (req, res) => {

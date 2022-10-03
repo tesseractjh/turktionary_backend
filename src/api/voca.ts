@@ -6,7 +6,7 @@ const router = Router();
 
 router.get('/count', async (req, res) => {
   const count = await findTotalVocaCount();
-  res.json({ count });
+  res.json(count);
 });
 
 export default router;

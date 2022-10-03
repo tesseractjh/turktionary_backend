@@ -1,5 +1,9 @@
 declare namespace Model {
-  interface User {
+  interface Log {
+    created_time: Date;
+  }
+
+  interface User extends Log {
     user_id: number;
     auth_id: string;
     auth_provider: string;
@@ -8,17 +12,15 @@ declare namespace Model {
     introduction: string | null;
     email: string | null;
     refresh_token: string | null;
-    created_time: Date;
   }
 
-  interface Notification {
+  interface Notification extends Log {
     notification_id: number;
     user_id: number;
     notification_type: string;
     notification_title: string;
     notification_text: string;
     notification_link: string;
-    created_time: Date;
   }
 
   interface POS {
@@ -27,7 +29,5 @@ declare namespace Model {
     lang_name: string;
     pos_name: string;
     pos_text: string;
-    pos_order: number;
-    created_time: Date;
   }
 }

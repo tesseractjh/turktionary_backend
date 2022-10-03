@@ -13,7 +13,7 @@ router.get('/', ...tokenHandlers, async (req, res) => {
     accessToken: { userId }
   } = req;
   const notification = await findUserNotification(userId as number);
-  res.json({ notification });
+  res.json(notification);
 });
 
 router.delete('/', ...tokenHandlers, async (req, res) => {
