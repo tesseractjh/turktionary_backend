@@ -56,7 +56,7 @@ export const createUser = async (
     }
   }
   await DB.query(`
-    INSERT INTO user(auth_id, auth_provider, user_name, email)
+    INSERT INTO user (auth_id, auth_provider, user_name, email)
     VALUES ('${id}', '${provider}', '${tempUserName}', '${email}');
   `);
   return tempUserName as string;
@@ -73,7 +73,8 @@ export const updateUserByTempUserName = async (
     SET
       user_name = '${nickname}',
       email = '${email}',
-      refresh_token = '${refreshToken}'
+      refresh_token = '${refreshToken}',
+      created_time = NOW()
     WHERE user_name = '${tempUserName}';
   `);
 };
