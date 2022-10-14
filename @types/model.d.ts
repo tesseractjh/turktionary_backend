@@ -30,4 +30,57 @@ declare namespace Model {
     pos_name: string;
     pos_text: string;
   }
+
+  interface Meaning {
+    meaning_id: number;
+    user_id: number;
+    voca_id: number;
+    pos_id: number;
+    meaning_order: number;
+    meaning_text: string;
+  }
+
+  interface Example {
+    example_id: number;
+    user_id: number;
+    meaning_id: number;
+    example_order: number;
+    example_text: string;
+    example_translation: string;
+  }
+
+  interface MeaningList {
+    pos_name: string | null;
+    meanings: (Meaning & { examples: Example[] | null })[];
+  }
+
+  interface Cognate {
+    cognate_id: number;
+    user_id: number;
+    voca1_id: number;
+    voca2_id: number;
+  }
+
+  interface Synonym {
+    synonym_id: number;
+    user_id: number;
+    voca1_id: number;
+    voca2_id: number;
+  }
+
+  interface Antonym {
+    antonym_id: number;
+    user_id: number;
+    voca1_id: number;
+    voca2_id: number;
+  }
+
+  interface Voca extends Log {
+    voca_id: number;
+    user_id: number;
+    lang_name: string;
+    headword: string;
+    voca_order: number;
+    etymology: string;
+  }
 }
