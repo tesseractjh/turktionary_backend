@@ -1,8 +1,8 @@
 import DB from '@config/database';
 
-export const findPOSList = async (langName: string) => {
+export const findPOSInfoList = async (langName: string) => {
   const seed = Math.floor(Math.random() * 10);
-  const count = await DB.query<
+  const posList = await DB.query<
     (Model.POS & {
       examples: (string | null)[];
       example_orders: (number | null)[];
@@ -35,7 +35,7 @@ export const findPOSList = async (langName: string) => {
   WHERE P.lang_name = '${langName}' AND (rand_order <= 5 OR rand_order IS NULL)
   GROUP BY P.pos_id
   `);
-  return count;
+  return posList;
 };
 
 export const findPOSById = async (posId: string) => {
@@ -140,4 +140,13 @@ export const updatePOS = async (
       pos_text = '${pos.pos_text}'
     WHERE pos_id = '${posId}';
   `);
+};
+
+export const findPOSList = async (langId: string) => {
+  const posList = await DB.query(`
+    SELECT pos_id, pos_name
+    FROM pos
+    WHERE lang_name = '${langId}';
+  `);
+  return posList;
 };

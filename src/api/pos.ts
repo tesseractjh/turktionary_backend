@@ -6,6 +6,7 @@ import {
   findPOSByLangAndName,
   findPOSHistoryDiff,
   findPOSHistorySummary,
+  findPOSInfoList,
   findPOSList,
   updatePOS
 } from '@services/pos';
@@ -44,11 +45,19 @@ router.patch('/', ...tokenHandlers, async (req, res) => {
   res.json({ success: true });
 });
 
+router.get('/list', async (req, res) => {
+  const {
+    query: { lang }
+  } = req;
+  const list = await findPOSList(lang as string);
+  res.json(list);
+});
+
 router.get('/list/:lang_name', async (req, res) => {
   const {
     params: { lang_name }
   } = req;
-  const list = await findPOSList(lang_name);
+  const list = await findPOSInfoList(lang_name);
   res.json(list);
 });
 
