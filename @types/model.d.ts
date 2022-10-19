@@ -1,6 +1,19 @@
 declare namespace Model {
   interface Log {
+    user_id: number;
     created_time: Date;
+  }
+
+  interface EditLog extends Log {
+    edit_log_id: number;
+  }
+
+  interface History extends Log {
+    user_exp: number;
+    user_name: string;
+    log_name: string;
+    log: string;
+    prev_log: string;
   }
 
   interface User extends Log {
@@ -33,7 +46,7 @@ declare namespace Model {
 
   interface Meaning {
     meaning_id: number;
-    user_id: number;
+    edit_log_id: number;
     voca_id: number;
     pos_id: number;
     meaning_order: number;
@@ -42,7 +55,7 @@ declare namespace Model {
 
   interface Example {
     example_id: number;
-    user_id: number;
+    edit_log_id: number;
     meaning_id: number;
     example_order: number;
     example_text: string;
@@ -56,28 +69,28 @@ declare namespace Model {
 
   interface Cognate {
     cognate_id: number;
-    user_id: number;
+    edit_log_id: number;
     voca1_id: number;
     voca2_id: number;
   }
 
   interface Synonym {
     synonym_id: number;
-    user_id: number;
+    edit_log_id: number;
     voca1_id: number;
     voca2_id: number;
   }
 
   interface Antonym {
     antonym_id: number;
-    user_id: number;
+    edit_log_id: number;
     voca1_id: number;
     voca2_id: number;
   }
 
-  interface Voca extends Log {
+  interface Voca {
     voca_id: number;
-    user_id: number;
+    edit_log_id: number;
     lang_name: string;
     headword: string;
     voca_order: number;
