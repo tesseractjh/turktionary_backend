@@ -9,21 +9,14 @@ export const findTotalVocaCount = async () => {
   return count;
 };
 
-export const findVoca = async (
-  langName: string,
-  headword: string,
-  vocaOrder: string
-) => {
+export const findVoca = async (langName: string, headword: string) => {
   const voca = await DB.query<Model.Voca[]>(`
     SELECT *
     FROM voca V
     WHERE
       lang_name = '${langName}'
       AND headword = '${headword}'
-      AND (
-        voca_order = '${vocaOrder}' OR
-        voca_order = '${Number(vocaOrder) + 1}'
-      );
+    ORDER BY voca_order
   `);
   return voca;
 };

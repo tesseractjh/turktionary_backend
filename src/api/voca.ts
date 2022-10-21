@@ -17,17 +17,13 @@ router.get('/', async (req, res) => {
   const {
     query: { lang, headword, order }
   } = req;
-  const voca = await findVoca(
-    lang as string,
-    headword as string,
-    order as string
-  );
+  const voca = await findVoca(lang as string, headword as string);
 
-  if (!voca?.length) {
+  if (!voca?.length || !voca[Number(order) - 1]) {
     return res.end();
   }
 
-  const { voca_id, etymology } = voca[0];
+  const { voca_id, etymology } = voca[Number(order) - 1];
   const is_unique = voca.length === 1;
   const [meanings, synonyms, antonyms, cognates] = await Promise.all([
     findVocaMeanings(voca_id),
