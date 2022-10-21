@@ -181,3 +181,124 @@ export const findVocaList = async ({
   `);
   return vocaList;
 };
+
+export const createVoca = async ({
+  userId,
+  voca,
+  synonyms = [],
+  antonyms = [],
+  cognates = [],
+  meaningList = []
+}: {
+  userId: number;
+  voca: Model.Voca;
+  synonyms?: number[];
+  antonyms?: number[];
+  cognates?: number[];
+  meaningList?: (Model.POS & {
+    meanings: (Model.Meaning & { examples: Model.Example[] })[];
+  })[];
+}) => {
+  const { lang_name, headword, etymology } = voca;
+  await DB.query(`
+    INSERT INTO edit_log (user_id, created_time)
+    VALUES ('${userId}', NOW());
+    
+    SET @last_log_id = LAST_INSERT_ID();
+
+    SELECT @max_voca_order := MAX(voca_order)
+    FROM voca
+    WHERE lang_name = '${lang_name}' AND headword = '${headword}';
+
+    INSERT INTO voca (edit_log_id, lang_name, headword, voca_order, etymology)
+    SELECT 
+      @last_log_id,
+      '${lang_name}',
+      '${headword}',
+      IFNULL(@max_voca_order, 0) + 1,
+      '${etymology}';
+
+    SET @last_voca_id = LAST_INSERT_ID();
+
+    ${
+      synonyms.length
+        ? `INSERT INTO synonym (edit_log_id, voca1_id, voca2_id) VALUES
+        ${synonyms
+          .map(
+            (synonym_id) => `
+          (@last_log_id, @last_voca_id, '${synonym_id}')
+        `
+          )
+          .join(',')}
+        ;`
+        : ''
+    }
+
+    ${
+      antonyms.length
+        ? `INSERT INTO antonym (edit_log_id, voca1_id, voca2_id) VALUES
+        ${antonyms
+          .map(
+            (antonym_id) => `
+          (@last_log_id, @last_voca_id, '${antonym_id}')
+        `
+          )
+          .join(',')}
+        ;`
+        : ''
+    }
+
+    ${
+      cognates.length
+        ? `INSERT INTO cognate (edit_log_id, voca1_id, voca2_id) VALUES
+        ${cognates
+          .map(
+            (cognate_id) => `
+          (@last_log_id, @last_voca_id, '${cognate_id}')
+        `
+          )
+          .join(',')}
+        ;`
+        : ''
+    }
+
+    ${meaningList.map(({ pos_id, meanings }) =>
+      meanings.length
+        ? meanings
+            .map(
+              ({ meaning_text, examples }, meaningIndex) => `
+            INSERT INTO
+              meaning (edit_log_id, voca_id, pos_id, meaning_order, meaning_text)
+            VALUES
+              (@last_log_id, @last_voca_id, '${pos_id}', '${
+                meaningIndex + 1
+              }', '${meaning_text}');
+
+            ${
+              examples.length
+                ? `
+                  SET @last_meaning_id = LAST_INSERT_ID();
+            
+                  INSERT INTO
+                    example (edit_log_id, meaning_id, example_order, example_text, example_translation)
+                  VALUES
+                  ${examples
+                    .map(
+                      ({ example_text, example_translation }, exampleIndex) => `
+                  (@last_log_id, @last_meaning_id, '${
+                    exampleIndex + 1
+                  }', '${example_text}', '${example_translation}')
+                  `
+                    )
+                    .join(',')}
+                  ;
+                `
+                : ''
+            }
+            `
+            )
+            .join('\n')
+        : ''
+    )}
+  `);
+};

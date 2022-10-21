@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import tokenHandlers from '@middlewares/tokenHandlers';
 import {
+  createVoca,
   findTotalVocaCount,
   findVoca,
   findVocaAntonyms,
@@ -61,6 +62,23 @@ router.get('/list', async (req, res) => {
     excludedLangName: excluded_lang as string
   });
   res.json(vocaList);
+});
+
+router.post('/', ...tokenHandlers, async (req, res) => {
+  const {
+    body: { voca, synonyms, antonyms, cognates, meaningList },
+    accessToken: { userId }
+  } = req;
+
+  await createVoca({
+    userId: userId as number,
+    voca,
+    synonyms,
+    antonyms,
+    cognates,
+    meaningList
+  });
+  res.json({ success: true });
 });
 
 export default router;
